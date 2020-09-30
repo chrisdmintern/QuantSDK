@@ -52,7 +52,7 @@ A Blocksize CORE™ API-Token can be generated in the Blocksize MATRIX™ API To
 ```python
 
 
-from quantsdklite import BlockSize
+from quant_sdk_lite.quantsdklite import BlockSize
 
 sdk = BlockSize('lAaUoVwxr2aOFhdS9QHa4hoVkpNPPHln99DsllOWusTLeqK2NVdIR0Ginltzr8tL5YdEGOEwIiXIHmXaUzPCYQEMbYWvwAbAyYoU9GVlPHvWq5nzxAvQZdYSzMmtj64h')
 
