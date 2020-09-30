@@ -1,17 +1,17 @@
 import requests
 import datetime
 import pandas as pd
-from typing import Union, Iterable
+from typing import Union
 
 
 class BlockSize:
 
     def __init__(self, token: str):
-        self.token: str = token
+        self.token = token
 
     def get_orderbook_data(self, exchanges: str, base: str, quote: str, depth: int = 1):
         try:
-            pair: str = base + quote
+            pair = base + quote
             response = requests.get(f"https://api.blocksize.capital/v1/data/orderbook?exchanges={exchanges}"
                                     f"&ticker={pair}&limit={depth}", headers={"x-api-key": self.token})
 
@@ -42,18 +42,33 @@ class BlockSize:
         except Exception as ex:
             print(ex)
 
-    def get_historical_vwap(self, base: str, quote: str, interval: str, start_date: str, end_date: str):
+    def get_historical_vwap(
+            self,
+            base: str,
+            quote: str,
+            interval: str,
+            start_date: int,
+            end_date: int = int(datetime.datetime.now().strftime('%s'))):
+
+        """
+
+        :param base: ETH, BTC
+        :param quote: EUR, USD
+        :param interval:
+        :param start_date: Unix time stamp
+        :param end_date: Unix time stamp
+        :return:
+        """
 
         try:
-            start_time_obj = datetime.datetime.strptime(start_date, '%Y-%m-%d')
-            start_timestamp = start_time_obj.strftime('%s')
-            end_time_obj = datetime.datetime.strptime(end_date, '%Y-%m-%d')
-            end_timestamp = end_time_obj.strftime('%s')
+
             pair = base + quote
             response = requests.get(f"https://api.blocksize.capital/v1/data/vwap/historic/{pair}/"
-                                    f"{interval}?from={start_timestamp}&to={end_timestamp}",
+                                    f"{interval}?from={start_date}&to={end_date}",
                                     headers={"x-api-key": self.token})
             df = pd.DataFrame(response.json())
+            if df.empty:
+                return df
             df.rename(columns={'timestamp': 'Time', 'price': 'Price', 'volume': 'Volume'}, inplace=True)
             df['Time'] = pd.to_datetime(df['Time'], unit='s')
             df.set_index('Time', inplace=True)
@@ -61,7 +76,14 @@ class BlockSize:
         except Exception as ex:
             print(ex)
 
-    def get_historic_ohlc(self, base: str, quote: str, interval: str, start_date: int, end_date: int) -> pd.DataFrame:
+    def get_historic_ohlc(
+            self,
+            base: str,
+            quote: str,
+            interval: str,
+            start_date: int,
+            end_date: int = int(datetime.datetime.now().strftime('%s'))):
+
         """
 
         :param base: ETH, BTC
@@ -80,7 +102,9 @@ class BlockSize:
                                     f"{pair}/{interval}?from={start_date}&to={end_date}",
                                     headers={"x-api-key": self.token})
             df = pd.DataFrame(response.json())
-            df.rename(columns={'timestamp': 'Timestamp',
+            if df.empty:
+                return df
+            df.rename(columns={'timestamp': 'Time',
                                'open': 'Open',
                                'high': 'High',
                                'low': 'Low',
@@ -91,12 +115,15 @@ class BlockSize:
         except Exception as ex:
             print(ex)
 
-    def post_simulated_order(self, base: str, quote: str, direction: str, quantity: Union[str, float, int],
-                             exchange: str = None, unlimited_funds: bool = False):
+    def post_simulated_order(
+            self,
+            base: str,
+            quote: str,
+            direction: str,
+            quantity: Union[str, float, int],
+            exchange: str = None,
+            unlimited_funds: bool = False):
 
-        if direction.upper() not in ['SELL', 'BUY']:
-            print('Direction can only be BUY or SELL as string')
-            return
         try:
             if exchange is None:
                 pass
@@ -124,23 +151,20 @@ class BlockSize:
             quote: str,
             direction: str,
             quantity: Union[str, float, int],
-            order_type: int = 0,
             exchange: str = None):
 
-        if direction.upper() not in ['SELL', 'BUY']:
-            print('Direction can only be BUY or SELL as string')
-            return
-        if order_type == (0 or 1) and not exchange:
-            print('For Market and Limit orders please select one or multiple exchanges. In case u want to ')
-
         try:
+            if exchange is None:
+                pass
+            else:
+                exchange = exchange.upper()
             params = {
                 'BaseCurrency': base.upper(),
                 'QuoteCurrency': quote.upper(),
                 'Quantity': quantity,
                 'Direction': direction,
                 'Type': 'MARKET',
-                'ExchangeList': exchange.upper(),
+                'ExchangeList': exchange,
             }
 
             response = requests.post("https://api.blocksize.capital/v1/trading/orders?", data=params,
