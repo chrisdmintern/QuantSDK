@@ -4,42 +4,48 @@ The Quant SDK is the third pillar of Blocksize Capital's product offer.
 It is a Python interface fully integrated with Blocksize CORE™. It allows the easy automation
 of algorithmic trading strategies, as well as accessing historical market data.
 
-The functionality of the quant SDK is divided into two parts:
+The functionality of the Quant SDK is divided into two parts:
 
 
 **Market Data**
 
 The Quant SDK seamlessly connects with the Blocksize CORE™ websocket and allows the collection of real-time market data of
 dozens of cryptocurrencies across all connected exchanges. Additionally, functionalities such as the retrieval of customizable
-historical data using Blocksize CORE™ RESTful API are accessible in a single line of code.
+historical data using Blocksize CORE™ RESTful API are accessible in a single line of code. This market data can be used for
+further analysis in order to optimize trading strategies.
 
 **Trading**
 
-The core part of the Quant SDK is the ability to automate trading strategies. The potential applications of strategies are vast: while simple portfolio rebalancing
-mechanisms can be easily implemented, higher-frequency quantitative strategies may be deployed as well.
+The core feature of the Quant SDK is the ability to automate trading strategies. Furthermore, the Quant SDK allows
+users to simulate trading strategies before deploying real capital. With access to orderbook data across all our
+ connected exchanges, higher-frequency quantitative strategies may also be deployed.
 
 
 The following documentation will serve as a walkthrough of the functionalities of the Quant SDK, starting with the setup of the SDK.
 Reading this tutorial is recommended as it delivers insights into the data structure used and explains some non-trivial parts of the
 Quant SDK
 
-Disclaimer: to use the Quant SDK, you need to authenticate yourself using your personalized Blocksize CORE™ API-Token.
-A Blocksize CORE™ API-Token can be generated in the Blocksize MATRIX™ API Token Settings. 
-
 ## Table of Contents
 
 - [Installation](#installation)
-- [Real Time Market Data](#real time market data)
-- [Historical Market Data](#historical market data)
+- [Real Time Market Data](#real-time-market-data)
+- [Historical Market Data](#historical-market-data)
 - [Trading](#trading)
 - [Balances](#balances)
 ## Installation
 
-### Requirments
-- Details of the requirements to successfully download the QuantSDK
-### Clone
+- You can install the Quant SDK using the following ```pip``` command.
+```
+pip install quant-sdk-lite
+```
+- The Quant SDK requires the following dependencies:
+````
+pip install pandas
+````
 
-- Clone this repo to your local machine using `https://github.com/Blocksize-Capital-GmbH/QuantSDK`
+````
+pip install requests
+````
 
 ### Create Your Blocksize Token
  - In order to utilize the capabilites of the QuantSDK we must first generate a Blocksize API Token.
