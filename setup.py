@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="quant-sdk-lite",
-    version="1.0.0",
+    version="1.0.1",
     author="Chris Mintern, Setor Blagogee",
     author_email="cm@blocksize-capital.com",
     description="A python wrapper for Blocksize Capitals Core Api",
