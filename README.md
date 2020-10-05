@@ -307,7 +307,7 @@ sdk.order_status('02963299-f1e2-4ca6-b34a-2a89940ed42a')
 
 ```
 ## Balances
-- The Quant SDK makes it very simple to check the balances of your connected exchanges.
+- The Quant SDK makes it very simple to check the balance of your connected exchanges.
 ```python
 sdk.get_exchange_balances()
 ```
