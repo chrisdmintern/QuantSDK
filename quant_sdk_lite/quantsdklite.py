@@ -1,7 +1,7 @@
 import requests
 import datetime
 import pandas as pd
-from typing import Union
+from typing import Union, List
 
 
 class BlockSize:
@@ -9,7 +9,11 @@ class BlockSize:
     def __init__(self, token: str):
         self.token = token
 
-    def get_orderbook_data(self, exchanges: str, base: str, quote: str, depth: int = 1):
+    def get_orderbook_data(self, exchanges: Union[str, List[str]], base: str, quote: str, depth: int = 1) -> dict:
+
+        if type(exchanges) == list:
+            exchanges = ', '.join(exchanges)
+
         try:
             pair = base + quote
             response = requests.get(f"https://api.blocksize.capital/v1/data/orderbook?exchanges={exchanges}"
@@ -121,21 +125,27 @@ class BlockSize:
             quote: str,
             direction: str,
             quantity: Union[str, float, int],
-            exchange: str = None,
-            unlimited_funds: bool = False):
+            exchanges: Union[str, List[str]] = None,
+            unlimited_funds: bool = False) -> dict:
 
         try:
-            if exchange is None:
+
+            if exchanges is None:
                 pass
+
             else:
-                exchange = exchange.upper()
+                if type(exchanges) == list:
+                    exchanges = list(map(lambda exchange: exchange.upper(), exchanges))
+                elif type(exchanges) == str:
+                    exchanges = exchanges.upper()
+
             params = {
                 'BaseCurrency': base.upper(),
                 'QuoteCurrency': quote.upper(),
                 'Quantity': quantity,
                 'Direction': direction.upper(),
                 'Type': 'Market',
-                'ExchangeList': exchange,
+                'ExchangeList': exchanges,
                 'Unlimited': unlimited_funds,
             }
 
@@ -151,20 +161,25 @@ class BlockSize:
             quote: str,
             direction: str,
             quantity: Union[str, float, int],
-            exchange: str = None):
+            exchanges: Union[str, List[str]] = None) -> dict:
 
         try:
-            if exchange is None:
+            if exchanges is None:
                 pass
+
             else:
-                exchange = exchange.upper()
+                if type(exchanges) == list:
+                    exchanges = list(map(lambda exchange: exchange.upper(), exchanges))
+                elif type(exchanges) == str:
+                    exchanges = exchanges.upper()
+
             params = {
                 'BaseCurrency': base.upper(),
                 'QuoteCurrency': quote.upper(),
                 'Quantity': quantity,
                 'Direction': direction,
                 'Type': 'MARKET',
-                'ExchangeList': exchange,
+                'ExchangeList': exchanges,
             }
 
             response = requests.post("https://api.blocksize.capital/v1/trading/orders?", data=params,
