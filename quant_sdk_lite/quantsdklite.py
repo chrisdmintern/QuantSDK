@@ -2,6 +2,7 @@ import requests
 import datetime
 import pandas as pd
 from typing import Union, List
+import re
 
 
 class BlockSize:
@@ -29,7 +30,7 @@ class BlockSize:
         try:
             pair = base + quote
             response = requests.get(
-                f"https://api.blocksize.capital/v1/data/vwap/latest/{pair}/{interval}",
+                f"https://api.blocksize.capital/v1/data/vwap/latest/{pair}/{self.converter(self.converter(interval))}",
                 headers={"x-api-key": self.token})
             return response.json()
         except Exception as ex:
@@ -40,7 +41,7 @@ class BlockSize:
         try:
             pair = base + quote
             response = requests.get(
-                f"https://api.blocksize.capital/v1/data/ohlc/latest/{pair}/{interval}",
+                f"https://api.blocksize.capital/v1/data/ohlc/latest/{pair}/{self.converter(self.converter(interval))}",
                 headers={"x-api-key": self.token})
             return response.json()
         except Exception as ex:
@@ -58,7 +59,7 @@ class BlockSize:
 
         :param base: ETH, BTC
         :param quote: EUR, USD
-        :param interval:
+        :param interval: 1s, 5s, 30s, 1m, 5m, 30m, 60m
         :param start_date: Unix time stamp
         :param end_date: Unix time stamp
         :return:
@@ -68,7 +69,7 @@ class BlockSize:
 
             pair = base + quote
             response = requests.get(f"https://api.blocksize.capital/v1/data/vwap/historic/{pair}/"
-                                    f"{interval}?from={start_date}&to={end_date}",
+                                    f"{self.converter(interval)}?from={start_date}&to={end_date}",
                                     headers={"x-api-key": self.token})
             df = pd.DataFrame(response.json())
             if df.empty:
@@ -99,11 +100,9 @@ class BlockSize:
         """
 
         try:
-
             pair = base + quote
-
             response = requests.get(f"https://api.blocksize.capital/v1/data/ohlc/historic/"
-                                    f"{pair}/{interval}?from={start_date}&to={end_date}",
+                                    f"{pair}/{self.converter(interval)}?from={start_date}&to={end_date}",
                                     headers={"x-api-key": self.token})
             df = pd.DataFrame(response.json())
             if df.empty:
@@ -216,3 +215,19 @@ class BlockSize:
             return response.json()
         except Exception as ex:
             print(ex)
+
+    @staticmethod
+    def converter(interval_string: str) -> str:
+
+        # allows all seconds and interval in respective time-unit
+        # allowed: ex. 10m, 600s, 60s, 1m, 2h, 7200s
+        # not allowed: ex. 120m, 360m
+        # broad sense check of parameters
+        assert re.match(r'^[1-5][0-9]?[mh]$|^60[m]$|^[0-9]{1,5}[s]$', interval_string), 'invalid interval pattern'
+
+        if interval_string[-1] == 's':
+            return interval_string
+        elif interval_string[-1] == 'm':
+            return str(f'{int(interval_string[:-1]) * 60}s')
+        elif interval_string[-1] == 'h':
+            return str(f'{int(interval_string[:-1]) * 60 * 60}s')

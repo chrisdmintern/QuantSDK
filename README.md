@@ -102,7 +102,7 @@ this feature, we need to decide three attributes:
 
 - (2) Quote Currency
 
-- (3) Time Frame (1s , 5s, 30s, 1m, 5m, 30m, 60m)
+- (3) Time Frame (1s, 5s, 30s, 1m, 5m, 30m, 60m)
 
 - In the following example, we get the VWAP of the ETH/EUR pair over a time horizon of 60 minutes.
  ```python
@@ -124,12 +124,12 @@ We need to input three variables in order to execute the OHLC function:
 
 - (2) Quote Currency
 
-- (3) Time Interval (1s , 5s, 30s, 1m, 5m, 30m, 60m)
+- (3) Time Interval (1s, 5s, 30s, 1m, 5m, 30m, 60m)
 
 - In the following example, we will find the OHLC of the XRP/EUR pair for the proceeding 60mins.
 
 ```python
-sdk.get_ohlc('XRP','EUR','60m')
+sdk.get_ohlc('XRP', 'EUR', '60m')
 ```
 - This function returns a dictionary which includes the OHLC Prices, Ticker & Timestamp. Furthermore, this data can
 be used to determine entry / exit points as part of a more sophisticated trading algorithm.
@@ -151,7 +151,7 @@ as multiple time intervals. Five input variables are required to successfully ex
 
 - (1) Base Currency
 - (2) Quote Currency
-- (3) Time Interval (1s , 5s, 30s, 1m, 5m, 30m, 60m)
+- (3) Time Interval (1s, 5s, 30s, 1m, 5m, 30m, 60m)
 - (4) Start Date (YYYY-MM-DD)
 - (5) End Date (YYYY-MM-DD)
 - In the following example, we will find the historic OHLC of the BTC/EUR pair,
@@ -175,7 +175,7 @@ digital assets, across multiple different time intervals. Five input variables a
 
 - (2) Quote Currency
 
-- (3) Time Interval (1s , 5s, 30s, 1m, 5m, 30m, 60m)
+- (3) Time Interval (1s, 5s, 30s, 1m, 5m, 30m, 60m)
 
 - (4) Start Date (YYYY-MM-DD)
 
