@@ -1,8 +1,8 @@
 import requests
 import datetime
 import pandas as pd
-from typing import Union, List
 import re
+from typing import Union, List
 
 
 class BlockSize:
