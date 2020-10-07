@@ -219,15 +219,20 @@ class BlockSize:
     @staticmethod
     def converter(interval_string: str) -> str:
 
-        # allows all seconds and interval in respective time-unit
-        # allowed: ex. 10m, 600s, 60s, 1m, 2h, 7200s
-        # not allowed: ex. 120m, 360m
-        # broad sense check of parameters
-        assert re.match(r'^[1-5][0-9]?[mh]$|^60[m]$|^[0-9]{1,5}[s]$', interval_string), 'invalid interval pattern'
+        try:
+            # allows all seconds and interval in respective time-unit
+            # allowed: ex. 10m, 600s, 60s, 1m, 2h, 7200s
+            # not allowed: ex. 120m, 360m
+            # broad sense check of parameters
 
-        if interval_string[-1] == 's':
-            return interval_string
-        elif interval_string[-1] == 'm':
-            return str(f'{int(interval_string[:-1]) * 60}s')
-        elif interval_string[-1] == 'h':
-            return str(f'{int(interval_string[:-1]) * 60 * 60}s')
+            assert re.match(r'^[1-5][0-9]?[mh]$|^60[m]$|^[0-9]{1,5}[s]$', interval_string), 'invalid interval pattern'
+
+            if interval_string[-1] == 's':
+                return interval_string
+            elif interval_string[-1] == 'm':
+                return str(f'{int(interval_string[:-1]) * 60}s')
+            elif interval_string[-1] == 'h':
+                return str(f'{int(interval_string[:-1]) * 60 * 60}s')
+
+        except Exception as ex:
+            print(ex)
