@@ -1,13 +1,15 @@
 import requests
-import datetime
 import pandas as pd
 import re
 from typing import Union, List
+from .api_config import ApiConfig
 
 
 class BlockSize:
 
-    def __init__(self, token: str):
+    def __init__(self, token: str = None):
+        if token is None:
+            token = ApiConfig.api_key
         self.token = token
         self.strategies = {}
 
@@ -52,7 +54,7 @@ class BlockSize:
             quote: str,
             interval: str,
             start_date: int,
-            end_date: int = int(datetime.datetime.now().strftime('%s'))) -> pd.DataFrame:
+            end_date: int) -> pd.DataFrame:
 
         """
 
@@ -85,7 +87,7 @@ class BlockSize:
             quote: str,
             interval: str,
             start_date: int,
-            end_date: int = int(datetime.datetime.now().strftime('%s'))) -> pd.DataFrame:
+            end_date: int) -> pd.DataFrame:
 
         """
 
@@ -233,5 +235,3 @@ class BlockSize:
 
         except Exception as ex:
             print(ex)
-
-

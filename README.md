@@ -58,7 +58,7 @@ pip install requests
 ```python
 
 
-from quant_sdk_lite.quantsdklite import BlockSize
+from quant_sdk.quantsdklite import BlockSize
 
 sdk = BlockSize('lAaUoVwxr2aOFhdS9QHa4hoVkpNPPHln99DsllOWusTLeqK2NVdIR0Ginltzr8tL5YdEGOEwIiXIHmXaUzPCYQEMbYWvwAbAyYoU9GVlPHvWq5nzxAvQZdYSzMmtj64h')
 
@@ -226,7 +226,7 @@ sdk.post_simulated_order('BTC','EUR','BUY',0.2,'Bittrex')
 This is because we wanted to simulate an order which would also check if there was enough funds in the account
 to successfully place the trade. The result of this function is printed below.
 ```python
-{'order': {'order_id': '6c8b37d1-b621-4f73-8e64-a529cb338f7b', 'base_currency': 'BTC', 'quote_currency': 'EUR', 'direction': 2, 'type': 1, 'quantity': '0.2', 'bsc_token_id': 'd5d08125-795a-4edf-bfc7-2db5b1240b37', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}, 'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS', 'elapsed_time_retrieval': 0, 'elapsed_time_calculation': 0, 'average_execution_price': '', 'trading_fees': '', 'trades': None}
+{'order': {'order_id': '6c8b37d1-b621-4f73-8e64-a529cb338f7b', 'base_currency': 'BTC', 'quote_currency': 'EUR', 'direction': 2, 'order_type': 1, 'quantity': '0.2', 'bsc_token_id': 'd5d08125-795a-4edf-bfc7-2db5b1240b37', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}, 'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS', 'elapsed_time_retrieval': 0, 'elapsed_time_calculation': 0, 'average_execution_price': '', 'trading_fees': '', 'trades': None}
 ```
 - Notice this simulated order was unsuccessful `'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS'`
 
@@ -270,7 +270,7 @@ sdk.post_market_order('eth', 'eur', 'sell', 0.15, 'bittrex')
 ```
  The function returns the unique order-ID, as well as other details about the trade.
 ```python
-{'order': {'order_id': '02963299-f1e2-4ca6-b34a-2a89940ed42a', 'base_currency': 'ETH', 'quote_currency': 'EUR', 'direction': 1, 'type': 1, 'quantity': '0.15', 'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}}
+{'order': {'order_id': '02963299-f1e2-4ca6-b34a-2a89940ed42a', 'base_currency': 'ETH', 'quote_currency': 'EUR', 'direction': 1, 'order_type': 1, 'quantity': '0.15', 'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}}
 ```
 In the following example, we will attempt to buy 1 BTC on the Binance Exchange:
 ```python

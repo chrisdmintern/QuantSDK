@@ -1,0 +1,3 @@
+
+class RealTimeData:
+    pass
