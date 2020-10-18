@@ -14,7 +14,7 @@ class Order:
                  quote_currency: str = None,
                  direction: str = None,
                  quantity: Union[float, int] = None,
-                 order_type: str = None,
+                 order_type: str = 'MARKET',
                  update_on_init: bool = False):
 
         if base_currency is not None:
@@ -39,6 +39,7 @@ class Order:
         if update_on_init:
             self.order_update()
 
+    # todo does not update the attributes but returns self without changes made to Order
     def order_status(self, original_response: bool = False):
         if original_response:
             return ApiClient().make_api_call(method='GET', access_route=f'trading/orders/id/{self._order_id}').json()
@@ -53,7 +54,7 @@ class Order:
             return self
 
     def cancel_order(self):
-        pass
+        raise UserWarning('Cancelling orders is yet to be enabled')
 
     def order_update(self, original_response: bool = False):
         """
@@ -69,13 +70,10 @@ class Order:
             self._trade_status = data['trade_status']
             self._timestamp = data['order']['order_timestamp']
             self._quantity = data['order']['quantity']
-            self._order_type = self._API_ENCODINGS['order_type'][data['order']['order_type']]
-            if self._order_type == 'LIMIT':
-                self._limit_price = data['order']['limit_price']
+            self._order_type = self._API_ENCODINGS['order_type'][data['order']['type']]
 
             if original_response:
-                return ApiClient().make_api_call(method='GET',
-                                                 access_route=f'trading/orders/id/{self._order_id}').json()
+                return data
             else:
                 return self
         except Exception as ex:
@@ -84,12 +82,13 @@ class Order:
     def _order_data(self):
         return {
             'order_id': self._order_id,
+            'order_type': self._order_type,
             'status': self._status,
+            'timestamp': self._timestamp,
             'base_currency': self._base_currency,
             'quote_currency': self._quote_currency,
             'quantity': self._quantity,
             'direction': self._direction,
-            'timestamp': self._timestamp,
             'trade_status': self._trade_status,
         }
 
@@ -102,8 +101,12 @@ class Order:
 
 
 class LimitOrder(Order):
+    _limit_price = None
 
-    order_type = 'LIMIT'
+    def __init__(self, order_id: str = None, base_currency: str = None, quote_currency: str = None,
+                 direction: str = None, quantity: Union[float, int] = None, update_on_init: bool = False):
+
+        super().__init__(order_id, base_currency, quote_currency, direction, quantity, 'LIMIT', update_on_init)
 
     def order_update(self, original_response: bool = False):
         """
@@ -119,14 +122,40 @@ class LimitOrder(Order):
             self._trade_status = data['trade_status']
             self._timestamp = data['order']['order_timestamp']
             self._quantity = data['order']['quantity']
-            self._order_type = self._API_ENCODINGS['order_type'][data['order']['order_type']]
-            if self._order_type == 'LIMIT':
-                self._limit_price = data['order']['limit_price']
+            self._order_type = self._API_ENCODINGS['order_type'][data['order']['type']]
+            self._limit_price = data['order']['limit_price']
 
             if original_response:
-                return ApiClient().make_api_call(method='GET',
-                                                 access_route=f'trading/orders/id/{self._order_id}').json()
+                return data
             else:
                 return self
         except Exception as ex:
             print(ex)
+
+
+class SimulatedOrder(Order):
+    __simulated = True
+
+    def __init__(self, order_id: str = None, base_currency: str = None, quote_currency: str = None,
+                 direction: str = None, quantity: Union[float, int] = None, update_on_init: bool = False):
+        super().__init__(order_id, base_currency, quote_currency, direction, quantity, update_on_init=update_on_init)
+
+    def _order_data(self):
+        return {
+            'order_id': self._order_id,
+            'order_type': f'Simulated-{self._order_type}',
+            'status': self._status,
+            'timestamp': self._timestamp,
+            'base_currency': self._base_currency,
+            'quote_currency': self._quote_currency,
+            'quantity': self._quantity,
+            'direction': self._direction,
+            'trade_status': self._trade_status,
+        }
+
+
+class SimulatedLimitOrder(SimulatedOrder, LimitOrder):
+
+    def __init__(self, order_id: str = None, base_currency: str = None, quote_currency: str = None,
+                 direction: str = None, quantity: Union[float, int] = None, update_on_init: bool = False):
+        super().__init__(order_id, base_currency, quote_currency, direction, quantity, update_on_init)

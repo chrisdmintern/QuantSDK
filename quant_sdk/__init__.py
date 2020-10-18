@@ -9,6 +9,9 @@ from quant_sdk.trading import Trading
 
 # util classes
 from quant_sdk.util_classes.order import Order
+from quant_sdk.util_classes.order import LimitOrder
+from quant_sdk.util_classes.order import SimulatedOrder
+from quant_sdk.util_classes.order import SimulatedLimitOrder
 
 # util functions
 from quant_sdk.util_functions.utils import interval_converter

@@ -2,33 +2,35 @@ import pandas as pd
 from typing import Union
 import datetime
 import time
-
+from quant_sdk.util_classes.data_types import Signal
 from .data import Data
 from .trading import Trading
 from .api_client import ApiClient
+
+
 # !HINT! : Look into copy and deepcopy for || referencing objects without creating unnecessary overhead
-# !Hint! : All orders is not updating in matrix
+# !Hint! : "All orders" is not updating in matrix
 
 
-# todo remove block (class BlockSize)
 # todo pure strategy here - BackTesting module/class will provide data and actual testing
 # todo create module or class to run strategies
 #  potentially portfolio class to incorporate all factors
 # !Hint! : Base Strategy Class to be inherited by the different Strategies
 class Strategy:
+    # moving averages will need more than just one
+    # price snapshot to calculate a signal
+    _required_data_length = 1
 
-    # todo remove block and move to new class structure
+    # todo implement all the necessary tracking and constraints to reflect actual trading scenarios
+    # todo implement fees possible input argument for backtesting function input for the
     def __init__(self,
                  interval: Union[int, float],
-                 evaluation_interval: Union[int, float],
                  trade_size: Union[int, float] = 10000,
                  portfolio_size: Union[int, float] = 100000, ):
         # set by inputs
         self.portfolio_size = portfolio_size
         self.trade_size = trade_size
         self.interval = interval
-
-        # self._active = False  # todo possible implementation
 
         # overview
         self.no_trades = 0
@@ -42,20 +44,6 @@ class Strategy:
             'total_fees': self.fees_acc
         }
 
-    def get_vwap_data(self):
-        pass
-
-    #
-    # @property
-    # def active(self):
-    #     return self._active
-    #
-    # def activate(self):
-    #     self._active = True
-    #
-    # def deactivate(self):
-    #     self._active = False
-    #
     @property
     def trade_log(self):
         return self._trade_log
@@ -63,33 +51,46 @@ class Strategy:
 
 class SimpleStrategy(Strategy):
 
-    def __init__(self, base: str, quote: str, interval: Union[int, float],
-                 evaluation_interval: Union[int, float], buy_price: Union[float, int] = None,
-                 sell_price: Union[float, int] = None, ):
+    def __init__(self, base: str, quote: str, interval: Union[int, float], buy_price: Union[float, int] = None,
+                 sell_price: Union[float, int] = None, execute_order_type: str = 'MARKET'):
 
-        super().__init__(interval, evaluation_interval)
+        super().__init__(interval)
 
+        self._sell_price: float = sell_price
+        self._buy_price: float = buy_price
         self.base = base.upper()
         self.quote = quote.upper()
         self.pair = self.base + self.quote
 
-        self._sell_price: float = sell_price
-        self._buy_price: float = buy_price
+        self.execute_order_type = execute_order_type  # MARKET or ORDER
+        self.exchange_list = None  # which exchanges should be used to execute the strategy
 
     def create_signal(self, price, ):
 
-        signal = {
-            'direction': None,
-            'quantity': None,
+        # todo BackTesting use tuples of data series as data inputs for function,
+        #  allows for multiple data inputs for signal creation
+        #  e.g. create Signal Simple needs only one column
+        #  and the current timestamp related price for each individual signal
+        #  hence only one pd.Series is needed.
+        #  More complex signals might be dependant on open and close price and would need two columns of data
+        #  -
+        #  - ex.:
+        #  - >>> BackTesting().backtest(strategy=ohlc_strat, data=(df['open'], df['close']))
+        #  -
+        #  the above line is the target base implementation for backtesting
+        #  also already considering more complex strategies
 
-        }
+        signal = Signal()
+        # todo portfolio check || do the funds exist to make a trade size trade accordingly
         if price > self._sell_price:
-            signal['direction'] = 'SELL'
+            signal.signal_type = 'SELL'
             return signal
         elif price < self._buy_price:
-            return 'BUY'
+            signal.signal_type = 'BUY'
+            return signal
         else:
-            return 'HOLD'
+            signal.signal_type = 'HOLD'
+            return signal
 
     def run(self, run_duration: int = 120):
         """
