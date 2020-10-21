@@ -126,7 +126,7 @@ this feature, we need to decide three attributes:
 
 - (2) Quote Currency
 
-- (3) Time Frame (1s, 5s, 30s, 1m, 5m, 30m, 60m)
+- (3) Time Interval - '1s' ,  '5s' ,  '30s' ,  '1m',  '5m' , '30m' , '60m' , '2h'  , '12h', '24h'
 
 - In the following example, we get the VWAP of the ETH/EUR pair over a time horizon of 60 minutes.
  ```python
@@ -153,7 +153,7 @@ We need to input three variables in order to execute the OHLC function:
 
 - (2) Quote Currency
 
-- (3) Time Interval (1s, 5s, 30s, 1m, 5m, 30m, 60m)
+- (3) Time Interval - '1s' ,  '5s' ,  '30s' ,  '1m',  '5m' , '30m' , '60m' , '2h'  , '12h', '24h'
 
 - In the following example, we will find the OHLC of the XRP/EUR pair for the proceeding 60mins.
 
