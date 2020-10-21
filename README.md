@@ -86,8 +86,32 @@ sdk.get_orderbook_data('Bittrex', 'BTC', 'EUR', 2)
 ```
 - This function returns the current Bittrex Orderbook best Bid / Ask prices, 
 as well as the volume assossiated with those orders.
- ```python
-[{'exchange': 'BITTREX', 'asks': [['9188.093', '0.01'], ['9189.999', '0.54465044']], 'bids': [['9136.065', '4.1373157'], ['9136.064', '0.05457277']]}]
+ ```json
+[
+  {
+    'exchange': 'BITTREX',
+    'asks': [
+      [
+        '9188.093',
+        '0.01'
+      ],
+      [
+        '9189.999',
+        '0.54465044'
+      ]
+    ],
+    'bids': [
+      [
+        '9136.065',
+        '4.1373157'
+      ],
+      [
+        '9136.064',
+        '0.05457277'
+      ]
+    ]
+  }
+]
 ```
 ### VWAP - Volume Weighted Average Price
  ```python
@@ -111,7 +135,12 @@ sdk.get_vwap('ETH', 'EUR', '60m')
 - This function returns a dictionary which includes the VWAP, Ticker, Timestamp & Volume. This data can be parsed
 and used for signals within a more sophisticated trading algorithm.
 ```python
-{'price': 298.3631794349796, 'ticker': 'ETHEUR', 'timestamp': 1601046000, 'volume': 3962.29888435}
+{
+  'price': 298.3631794349796,
+  'ticker': 'ETHEUR',
+  'timestamp': 1601046000,
+  'volume': 3962.29888435
+}
 ``` 
 ### OHLC - Open High Low Close 
 
@@ -134,7 +163,14 @@ sdk.get_ohlc('XRP', 'EUR', '60m')
 - This function returns a dictionary which includes the OHLC Prices, Ticker & Timestamp. Furthermore, this data can
 be used to determine entry / exit points as part of a more sophisticated trading algorithm.
 ```python
-{'close': 0.2064, 'high': 0.20866, 'low': 0.20587, 'open': 0.2069, 'ticker': 'XRPEUR', 'timestamp': 1601049600}
+{
+  'close': 0.2064,
+  'high': 0.20866,
+  'low': 0.20587,
+  'open': 0.2069,
+  'ticker': 'XRPEUR',
+  'timestamp': 1601049600
+}
 ```
 
 # Historical Market Data
@@ -226,7 +262,24 @@ sdk.post_simulated_order('BTC','EUR','BUY',0.2,'Bittrex')
 This is because we wanted to simulate an order which would also check if there was enough funds in the account
 to successfully place the trade. The result of this function is printed below.
 ```python
-{'order': {'order_id': '6c8b37d1-b621-4f73-8e64-a529cb338f7b', 'base_currency': 'BTC', 'quote_currency': 'EUR', 'direction': 2, 'type': 1, 'quantity': '0.2', 'bsc_token_id': 'd5d08125-795a-4edf-bfc7-2db5b1240b37', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}, 'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS', 'elapsed_time_retrieval': 0, 'elapsed_time_calculation': 0, 'average_execution_price': '', 'trading_fees': '', 'trades': None}
+{
+  'order': {
+    'order_id': '6c8b37d1-b621-4f73-8e64-a529cb338f7b',
+    'base_currency': 'BTC',
+    'quote_currency': 'EUR',
+    'direction': 2,
+    'type': 1,
+    'quantity': '0.2',
+    'bsc_token_id': 'd5d08125-795a-4edf-bfc7-2db5b1240b37',
+    'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'
+  },
+  'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS',
+  'elapsed_time_retrieval': 0,
+  'elapsed_time_calculation': 0,
+  'average_execution_price': '',
+  'trading_fees': '',
+  'trades': None
+}
 ```
 - Notice this simulated order was unsuccessful `'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS'`
 
@@ -242,8 +295,35 @@ sdk.post_simulated_order('BTC','EUR','SELL',10,'Binance',True)
 - As a result, we have simulated an order which assumes infinite funds in our account.
 
 ```python
-{'order': {'order_id': '8f1b1ce1-b8ad-4b09-897a-fe35c3ec3eaf', 'base_currency': 'BTC', 'quote_currency': 'EUR', 'direction': 1, 'type': 1, 'quantity': '10', 'bsc_token_id': 'd5d08125-795a-4edf-bfc7-2db5b1240b37', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}, 'elapsed_time_retrieval': 22910, 'elapsed_time_calculation': 177, 'average_execution_price': '9215.402037268002', 'trading_fees': '0.01', 'trades': [{'exchange': 'BINANCE', 'quantity': '10.0', 'apikey_id': '00000000-0000-0000-0000-000000000000', 'average_execution_price': '9215.402037268002', 'trading_fees': '0.01', 'funds': '-1', 'fee_bp': '10', 'trade_id': '4a363f00-9e6b-4c6e-a61b-47e4a2676f88', 'buffer_bp': '25'}]}
-
+{
+  'order': {
+    'order_id': '8f1b1ce1-b8ad-4b09-897a-fe35c3ec3eaf',
+    'base_currency': 'BTC',
+    'quote_currency': 'EUR',
+    'direction': 1,
+    'type': 1,
+    'quantity': '10',
+    'bsc_token_id': 'd5d08125-795a-4edf-bfc7-2db5b1240b37',
+    'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'
+  },
+  'elapsed_time_retrieval': 22910,
+  'elapsed_time_calculation': 177,
+  'average_execution_price': '9215.402037268002',
+  'trading_fees': '0.01',
+  'trades': [
+    {
+      'exchange': 'BINANCE',
+      'quantity': '10.0',
+      'apikey_id': '00000000-0000-0000-0000-000000000000',
+      'average_execution_price': '9215.402037268002',
+      'trading_fees': '0.01',
+      'funds': '-1',
+      'fee_bp': '10',
+      'trade_id': '4a363f00-9e6b-4c6e-a61b-47e4a2676f88',
+      'buffer_bp': '25'
+    }
+  ]
+}
 ```
 ### Real Orders
 
@@ -270,7 +350,18 @@ sdk.post_market_order('eth', 'eur', 'sell', 0.15, 'bittrex')
 ```
  The function returns the unique order-ID, as well as other details about the trade.
 ```python
-{'order': {'order_id': '02963299-f1e2-4ca6-b34a-2a89940ed42a', 'base_currency': 'ETH', 'quote_currency': 'EUR', 'direction': 1, 'type': 1, 'quantity': '0.15', 'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}}
+{
+  'order': {
+    'order_id': '02963299-f1e2-4ca6-b34a-2a89940ed42a',
+    'base_currency': 'ETH',
+    'quote_currency': 'EUR',
+    'direction': 1,
+    'type': 1,
+    'quantity': '0.15',
+    'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75',
+    'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'
+  }
+}
 ```
 In the following example, we will attempt to buy 1 BTC on the Binance Exchange:
 ```python
@@ -280,8 +371,19 @@ The purpose of this example is to show that if the balance is not sufficient to 
 the function will return ``'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS'``. This can be seen in the response below.
  
 ```python
-{'order': {'order_id': 'f8faeccb-47d9-46b0-ba28-81d54a073e46', 'base_currency': 'BTC', 'quote_currency': 'EUR', 'direction': 2, 'type': 1, 'quantity': '1', 'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}, 'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS'}
-
+{
+  'order': {
+    'order_id': 'f8faeccb-47d9-46b0-ba28-81d54a073e46',
+    'base_currency': 'BTC',
+    'quote_currency': 'EUR',
+    'direction': 2,
+    'type': 1,
+    'quantity': '1',
+    'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75',
+    'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'
+  },
+  'failed_reason': 'FAILED_REASON_INSUFFICIENT_FUNDS'
+}
 ```
 ### Order Status
 
@@ -303,8 +405,41 @@ sdk.order_status('02963299-f1e2-4ca6-b34a-2a89940ed42a')
 - We can also see the ``timestamp`` assosiated with the trade  as well as the `executed_price`.
 
 ```python
-{'aggregated_status': 2, 'order': {'order_id': '02963299-f1e2-4ca6-b34a-2a89940ed42a', 'base_currency': 'ETH', 'quote_currency': 'EUR', 'direction': 1, 'type': 1, 'quantity': '0.15', 'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75', 'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1', 'order_timestamp': 1601289889745}, 'orderid': '02963299-f1e2-4ca6-b34a-2a89940ed42a', 'trade_status': [{'trade': {'trade_id': '30c6edae-0928-4986-acf9-2d6946c22b91', 'exchange': 'BITTREX', 'trade_quantity': '0.15'}, 'execution_status': 2, 'status_report': {'trade_status': 3, 'exchange_trade_id': '8c0b7d3c-1d22-4169-aef7-c31327582588', 'placed_timestamp': 1601289890114, 'closed_timestamp': 1601289890050, 'executed_quantity': '0.15', 'executed_price': '307.131', 'status_timestamp': 1601289896067}}], 'userid': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'}
-
+{
+  'aggregated_status': 2,
+  'order': {
+    'order_id': '02963299-f1e2-4ca6-b34a-2a89940ed42a',
+    'base_currency': 'ETH',
+    'quote_currency': 'EUR',
+    'direction': 1,
+    'type': 1,
+    'quantity': '0.15',
+    'bsc_token_id': '4a68e081-de91-4b40-a615-85e472a8fa75',
+    'user_id': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1',
+    'order_timestamp': 1601289889745
+  },
+  'orderid': '02963299-f1e2-4ca6-b34a-2a89940ed42a',
+  'trade_status': [
+    {
+      'trade': {
+        'trade_id': '30c6edae-0928-4986-acf9-2d6946c22b91',
+        'exchange': 'BITTREX',
+        'trade_quantity': '0.15'
+      },
+      'execution_status': 2,
+      'status_report': {
+        'trade_status': 3,
+        'exchange_trade_id': '8c0b7d3c-1d22-4169-aef7-c31327582588',
+        'placed_timestamp': 1601289890114,
+        'closed_timestamp': 1601289890050,
+        'executed_quantity': '0.15',
+        'executed_price': '307.131',
+        'status_timestamp': 1601289896067
+      }
+    }
+  ],
+  'userid': 'Zh4WxmYDNihRbFLIBQk6w4QjNul1'
+}
 ```
 ## Balances
 - The Quant SDK makes it very simple to check the balance of your connected exchanges.
