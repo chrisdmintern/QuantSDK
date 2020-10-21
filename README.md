@@ -86,7 +86,7 @@ sdk.get_orderbook_data('Bittrex', 'BTC', 'EUR', 2)
 ```
 - This function returns the current Bittrex Orderbook best Bid / Ask prices, 
 as well as the volume assossiated with those orders.
- ```json
+ ```python
 [
   {
     'exchange': 'BITTREX',
