@@ -228,5 +228,6 @@ Temporary Items
 /Notes.txt
 /function_tests/
 /test.py
-/tests.py
+/internal_tests/tests.py
 /practice/
+/internal_tests/

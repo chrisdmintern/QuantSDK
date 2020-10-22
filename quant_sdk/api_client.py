@@ -20,7 +20,7 @@ class ApiClient:
         self.headers = {"x-api-key": api_key}
         self.base_url = ApiConfig.url_base
         self.methods = {'GET', 'POST'}
-        self.thread_pool = ThreadPool()
+        # self.thread_pool = ThreadPool() # todo after many instances of ApiConfig have been called no more thread.pools can be opened anymore either a __del__ will help or deepcopy need to look into the issue
 
     def make_api_call(self, access_route: str, method: str, params=None, data=None,
                       parallel=False) -> Union[requests.Response, multiprocessing.pool.ApplyResult]:
@@ -33,9 +33,9 @@ class ApiClient:
         if method == 'GET':
             if not parallel:
                 return requests.get(url=url, params=params, headers=self.headers)
-            else:
-                thread = self.thread_pool.apply_async(requests.get, [url], {'params': params, 'headers': self.headers})
-            return thread
+            # else:  # todo after many iterations thread.pools cannoit be opened anymore either a __del__ will help or deepcopy need to look into the issue
+            #     thread = self.thread_pool.apply_async(requests.get, [url], {'params': params, 'headers': self.headers})
+            # return thread
 
         if method == 'POST':
             return requests.post(url=url, data=data, headers=self.headers)

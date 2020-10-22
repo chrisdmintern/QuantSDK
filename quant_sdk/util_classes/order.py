@@ -101,7 +101,7 @@ class Order:
 
 
 class LimitOrder(Order):
-    _limit_price = None
+    _limit_price = None  # limit order class extension
 
     def __init__(self, order_id: str = None, base_currency: str = None, quote_currency: str = None,
                  direction: str = None, quantity: Union[float, int] = None, update_on_init: bool = False):
@@ -123,7 +123,7 @@ class LimitOrder(Order):
             self._timestamp = data['order']['order_timestamp']
             self._quantity = data['order']['quantity']
             self._order_type = self._API_ENCODINGS['order_type'][data['order']['type']]
-            self._limit_price = data['order']['limit_price']
+            self._limit_price = data['order']['limit_price']  # limit order class extension
 
             if original_response:
                 return data
@@ -134,7 +134,7 @@ class LimitOrder(Order):
 
 
 class SimulatedOrder(Order):
-    __simulated = True
+    __simulated = True  # simulated order class extension
 
     def __init__(self, order_id: str = None, base_currency: str = None, quote_currency: str = None,
                  direction: str = None, quantity: Union[float, int] = None, update_on_init: bool = False):
@@ -155,7 +155,7 @@ class SimulatedOrder(Order):
 
 
 class SimulatedLimitOrder(SimulatedOrder, LimitOrder):
-
+    # combines the enhancements of SimulatedOrder and LimitOrder class
     def __init__(self, order_id: str = None, base_currency: str = None, quote_currency: str = None,
                  direction: str = None, quantity: Union[float, int] = None, update_on_init: bool = False):
         super().__init__(order_id, base_currency, quote_currency, direction, quantity, update_on_init)

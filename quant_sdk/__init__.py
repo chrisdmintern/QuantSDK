@@ -6,6 +6,8 @@ from quant_sdk.api_client import ApiClient
 from quant_sdk.data import Data
 from quant_sdk.configs import Configs
 from quant_sdk.trading import Trading
+from quant_sdk.backtesting import BackTesting
+from quant_sdk.util_classes.portfolio import Portfolio
 
 # util classes
 from quant_sdk.util_classes.order import Order

@@ -11,12 +11,12 @@ class Trading:
             api_client = ApiClient()
         self.api_client = api_client
 
-    def place_market_order(self,
-                           base: str,
-                           quote: str,
-                           direction: str,
-                           quantity: Union[str, float, int],
-                           exchanges: Union[str, List[str]] = None) -> Any:
+    def market_order(self,
+                     base: str,
+                     quote: str,
+                     direction: str,
+                     quantity: Union[str, float, int],
+                     exchanges: Union[str, List[str]] = None) -> Any:
 
         """
         Returns the json-encoded content of a response, if any.
@@ -45,13 +45,13 @@ class Trading:
         except Exception as ex:
             print(ex)
 
-    def place_limit_order(self,
-                          base: str,
-                          quote: str,
-                          direction: str,
-                          quantity: Union[str, float, int],
-                          limit_price: Union[str, float, int],
-                          exchanges: Union[str, List[str]] = None) -> Any:
+    def limit_order(self,
+                    base: str,
+                    quote: str,
+                    direction: str,
+                    quantity: Union[str, float, int],
+                    limit_price: Union[str, float, int],
+                    exchanges: Union[str, List[str]] = None) -> Any:
         """
         Returns the json-encoded content of a response, if any.
         """

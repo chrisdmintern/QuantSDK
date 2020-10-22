@@ -25,18 +25,20 @@ class Data:
                 'exchanges': exchanges,
                 'ticker': pair,
                 'limit': depth,
-                'range': f'{range_lb}, {range_ub}'
+                # 'range': f'{range_lb}, {range_ub}'  # todo fix
             }
             return self.api_client.make_api_call(method='GET', access_route=f'data/orderbook', params=params).json()
 
         except Exception as ex:
             print(ex)
 
-    def get_vwap(self, base: str, quote: str, interval: str) -> Any:
+    def get_vwap(self, base: str, quote: str, interval: Union[str, int]) -> Any:
 
         try:
             pair = base + quote
-            url_extension = f'data/vwap/latest/{pair}/{interval_converter(interval)}'
+            if type(interval) == str:
+                interval = interval_converter(interval)
+            url_extension = f'data/vwap/latest/{pair}/{interval}'
             return self.api_client.make_api_call(method='GET', access_route=url_extension, params=None).json()
         except Exception as ex:
             print(ex)
@@ -45,7 +47,9 @@ class Data:
 
         try:
             pair = base + quote
-            url_extension = f'data/ohlc/latest/{pair}/{interval_converter(interval)}'
+            if type(interval) == str:
+                interval = interval_converter(interval)
+            url_extension = f'data/ohlc/latest/{pair}/{interval}'
             return self.api_client.make_api_call(method='GET', access_route=url_extension, params=None).json()
         except Exception as ex:
             print(ex)
@@ -66,15 +70,17 @@ class Data:
         :param return_df:
         :param base: ETH, BTC
         :param quote: EUR, USD
-        :param interval: 1s, 5s, 30s, 1m, 5m, 30m, 60m
-        :param start_date: Unix timestamp
-        :param end_date: Unix timestamp
+        :param interval:
+        :param start_date: timestamp
+        :param end_date: timestamp
         :return:
         """
 
         try:
             pair = base + quote
-            url_extension = f'data/vwap/historic/{pair}/{interval_converter(interval)}'
+            if type(interval) == str:
+                interval = interval_converter(interval)
+            url_extension = f'data/vwap/historic/{pair}/{interval}'
             params = {
                 'from': start_date,
                 'to': end_date
@@ -89,7 +95,7 @@ class Data:
             if df.empty:
                 return df
 
-            if convert_to_datetime is False:
+            if convert_to_datetime is True:
                 df.rename(columns={'timestamp': 'Time', 'price': 'Price', 'volume': 'Volume'}, inplace=True)
                 df['Time'] = pd.to_datetime(df['Time'], unit='s')
                 df.set_index('Time', inplace=True)
@@ -123,7 +129,9 @@ class Data:
 
         try:
             pair = base + quote
-            url_extension = f'data/ohlc/historic/{pair}/{interval_converter(interval)}'
+            if type(interval) == str:
+                interval = interval_converter(interval)
+            url_extension = f'data/ohlc/historic/{pair}/{interval}'
             params = {
                 'from': start_date,
                 'to': end_date
@@ -138,7 +146,7 @@ class Data:
             if df.empty:
                 return df
 
-            if convert_to_datetime is False:
+            if convert_to_datetime is True:
                 df.rename(columns={'timestamp': 'Time', 'price': 'Price', 'volume': 'Volume'}, inplace=True)
                 df['Time'] = pd.to_datetime(df['Time'], unit='s')
                 df.set_index('Time', inplace=True)

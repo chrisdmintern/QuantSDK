@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import re
-from typing import Union, List
+from typing import Union, List, Any
 from .api_config import ApiConfig
 
 
@@ -13,7 +13,7 @@ class BlockSize:
         self.token = token
         self.strategies = {}
 
-    def get_orderbook_data(self, exchanges: Union[str, List[str]], base: str, quote: str, depth: int = 1) -> dict:
+    def get_orderbook_data(self, exchanges: Union[str, List[str]], base: str, quote: str, depth: int = 1) -> Any:
 
         if type(exchanges) == list:
             exchanges = ', '.join(exchanges)
@@ -26,7 +26,7 @@ class BlockSize:
         except Exception as ex:
             print(ex)
 
-    def get_vwap(self, base: str, quote: str, interval: str):
+    def get_vwap(self, base: str, quote: str, interval: str) -> Any:
 
         try:
             pair = base + quote
