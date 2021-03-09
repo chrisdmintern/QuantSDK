@@ -25,7 +25,7 @@ class BlockSize:
 
         pair = base + quote
         response = requests.get(f"https://api.blocksize.capital/v1/data/orderbook?exchanges={exchanges}"
-                                f"&ticker={pair}&limit={depth}", headers={"x-api-key": self.token})
+                                f"&ticker={pair}&limit={depth+1}", headers={"x-api-key": self.token})
         return response.json()
 
     def get_vwap(self, base: str, quote: str, interval: str):
@@ -118,31 +118,27 @@ class BlockSize:
             quote: str,
             direction: str,
             quantity: Union[str, float, int],
-            exchanges: Union[str, List[str]] = None,
+            exchanges: List[str] = None,
             unlimited_funds: bool = False,
             disable_logging: bool = False) -> dict:
 
         if exchanges is None:
             pass
         else:
-            if type(exchanges) == list:
-                exchanges = list(map(lambda exchange: exchange.upper(), exchanges))
-                exchanges = ','.join(exchanges)
-            elif type(exchanges) == str:
-                exchanges = exchanges.upper()
+            exchanges = [x.upper() for x in exchanges]
 
-        params = {
-            'BaseCurrency': base.upper(),
-            'QuoteCurrency': quote.upper(),
-            'Quantity': quantity,
-            'Direction': direction.upper(),
-            'Type': 'Market',
-            'ExchangeList': exchanges,
-            'Unlimited': unlimited_funds,
-            'DisableLogging': disable_logging,
+        body = {
+            "base_currency": base.upper(),
+            "quote_currency": quote.upper(),
+            "quantity": quantity,
+            "direction": direction.upper(),
+            "type": "MARKET",
+            "exchange_list": exchanges,
+            "unlimited": unlimited_funds,
+            "disable_logging": disable_logging
         }
 
-        response = requests.post("https://api.blocksize.capital/v1/trading/orders/simulated", data=params,
+        response = requests.post("https://api.blocksize.capital/v1/trading/orders/simulated", json=body,
                                  headers={"x-api-key": self.token})
         return response.json()
 
@@ -152,27 +148,23 @@ class BlockSize:
             quote: str,
             direction: str,
             quantity: Union[str, float, int],
-            exchanges: Union[str, List[str]] = None) -> dict:
+            exchanges: List[str] = None) -> dict:
 
         if exchanges is None:
             pass
         else:
-            if type(exchanges) == list:
-                exchanges = list(map(lambda exchange: exchange.upper(), exchanges))
-                exchanges = ','.join(exchanges)
-            elif type(exchanges) == str:
-                exchanges = exchanges.upper()
+            exchanges = [x.upper() for x in exchanges]
 
-        params = {
-            'BaseCurrency': base.upper(),
-            'QuoteCurrency': quote.upper(),
-            'Quantity': quantity,
-            'Direction': direction,
-            'Type': 'MARKET',
-            'ExchangeList': exchanges,
+        body = {
+            "base_currency": base.upper(),
+            "quote_currency": quote.upper(),
+            "quantity": quantity,
+            "direction": direction.upper(),
+            "type": "MARKET",
+            "exchange_list": exchanges,
         }
 
-        response = requests.post("https://api.blocksize.capital/v1/trading/orders?", data=params,
+        response = requests.post("https://api.blocksize.capital/v1/trading/orders?", json=body,
                                  headers={"x-api-key": self.token})
 
         return response.json()
